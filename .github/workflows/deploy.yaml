@@ -36,4 +36,5 @@ jobs:
         run: |
           gcloud auth configure-docker asia-east1-docker.pkg.dev
           docker build -t asia-east1-docker.pkg.dev/${GCP_PROJECT_ID}/blipin-backend/blipin-backend:latest .
+          docker login -u oauth2accesstoken -p "$(gcloud auth print-access-token)" https://asia-east1-docker.pkg.dev
           docker push asia-east1-docker.pkg.dev/${GCP_PROJECT_ID}/blipin-backend/blipin-backend:latest
