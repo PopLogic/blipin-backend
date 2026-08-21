@@ -12,7 +12,9 @@ env:
 jobs:
   build:
     name: Build image
-    runs-on: ubuntu-latest
+    runs-on: 
+      group: Blipin-Client
+      labels: [ self-hosted ]
 
     environment:
       name: staging
