@@ -1,0 +1,38 @@
+services:
+  blipin-postgres:
+    image: postgres:17-alpine
+    container_name: blipin-postgres
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: blipin_client
+    ports:
+      - "5432:5432"
+    networks:
+      - blipin-network
+  
+  blipin-redis:
+    image: redis:8-alpine
+    container_name: blipin-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - blipin-network
+
+  api:
+    build: .
+    container_name: blipin-backend
+    env_file:
+      - app.env
+    ports:
+      - "8080:8080"
+    depends_on:
+      - blipin-postgres
+    networks:
+      - blipin-network
+    entrypoint:
+      ["/app/wait-for.sh", "blipin-postgres:5432", "--", "/app/start.sh"]
+    command: ["/app/blipin-backend"]
+networks:
+  blipin-network:
+    driver: bridge
